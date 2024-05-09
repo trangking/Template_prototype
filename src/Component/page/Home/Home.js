@@ -19,9 +19,12 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
-import SearchIcon from '@mui/icons-material/Search';
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import SearchIcon from "@mui/icons-material/Search";
+import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import TableHome from "./TableHome";
+import Project from "../Project/Project";
+import Material from "../Material/Material";
 
 const drawerWidth = 240;
 
@@ -74,12 +77,17 @@ function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [selectedMenu, setSelectedMenu] = React.useState("หน้าหลัก");
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const handleItemClick = (menu) => {
+    setSelectedMenu(menu);
     setOpen(false);
   };
 
@@ -127,15 +135,16 @@ function Home() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["หน้าหลัก", "เลือกโปรเจ็ค", "รายการ"].map((text, index) => (
-            <ListItem key={text} disablePadding>
+          {["หน้าหลัก", "เลือกโปรเจ็ค", "รายการ", "แมททีเรียล"].map((menu) => (
+            <ListItem key={menu} onClick={() => handleItemClick(menu)}>
               <ListItemButton>
                 <ListItemIcon>
-                  {index === 0 && <HomeIcon />}
-                  {index === 1 && <SearchIcon />}
-                  {index === 2 && <AssignmentOutlinedIcon />}
+                  {menu === "หน้าหลัก" && <HomeIcon />}
+                  {menu === "เลือกโปรเจ็ค" && <SearchIcon />}
+                  {menu === "รายการ" && <AssignmentOutlinedIcon />}
+                  {menu === "แมททีเรียล" && <EngineeringIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={menu} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -158,31 +167,10 @@ function Home() {
         </List>
       </Drawer>
       <Main open={open}>
-          <DrawerHeader />
-          <TableContainer component={Paper}>
-              <Table>
-                  <TableHead>
-                      <TableRow>
-                          <TableCell>ลำดับ</TableCell>
-                          <TableCell>รายการ</TableCell>
-                          <TableCell>ปริมาณ</TableCell>
-                          <TableCell>หน่วย</TableCell>
-                          <TableCell>ราคาต่อหน่วย(บาท)</TableCell>
-                          <TableCell>ราคารวม(บาท)</TableCell>
-                          <TableCell>รวมทั้งหมด(บาท)</TableCell>
-                          <TableCell>หมายเหตุ</TableCell>
-                      </TableRow>
-                  </TableHead>
-                  <TableBody>
-                      <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                      </TableRow>
-                      {/* เพิ่ม TableRow และ TableCell เพิ่มเติมตามความต้องการ */}
-                  </TableBody>
-              </Table>
-          </TableContainer>
+        <DrawerHeader />
+        {selectedMenu === "หน้าหลัก" && <TableHome />}
+        {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
+        {selectedMenu === "แมททีเรียล" && <Material />}
       </Main>
     </Box>
   );

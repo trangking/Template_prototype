@@ -3,8 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import Login from "./Component/Login/Login";
-import Home from "./Component/Home/Home";
+import Login from "./Component/page/Login/Login";
+import Home from "./Component/page/Home/Home";
+import TableHome from "./Component/page/Home/TableHome";
+import Material from "./Component/page/Material/Material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const routes = [
@@ -19,6 +21,14 @@ const routes = [
   {
     path: "/Home",
     element: <Home />,
+  },
+  {
+    path: "/TableHome",
+    element: <TableHome />,
+  },
+  {
+    path: "/Material",
+    element: <Material />,
   },
 ];
 
