@@ -17,12 +17,11 @@ const Project = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>ลำดับ</TableCell>
               <TableCell>โปรเจ็ค</TableCell>
-              <TableCell>สถานะ</TableCell>
-              <TableCell>วันที่สร้าง</TableCell>
-              <TableCell>อัปเดตล่าสุด</TableCell>
-              <TableCell>เจ้าของงาน</TableCell>
-              <TableCell>รายระเอียด</TableCell>
+              <TableCell>รวมวัสดุ</TableCell>
+              <TableCell>รวมค่าแรง</TableCell>
+              <TableCell>รวมทั้งหมด</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

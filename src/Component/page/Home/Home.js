@@ -25,6 +25,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import TableHome from "./TableHome";
 import Project from "../Project/Project";
 import Material from "../Material/Material";
+import ReportTable from "../Report/ReportTable";
 
 const drawerWidth = 240;
 
@@ -166,12 +167,13 @@ function Home() {
           </ListItem>
         </List>
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        {selectedMenu === "หน้าหลัก" && <TableHome />}
-        {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
-        {selectedMenu === "แมททีเรียล" && <Material />}
-      </Main>
+        <Main open={open}>
+            <DrawerHeader/>
+            {selectedMenu === "หน้าหลัก" && <TableHome/>}
+            {selectedMenu === "เลือกโปรเจ็ค" && <Project/>}
+            {selectedMenu === "รายการ" && <ReportTable/>}
+            {selectedMenu === "แมททีเรียล" && <Material/>}
+        </Main>
     </Box>
   );
 }
