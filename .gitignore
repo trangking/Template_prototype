@@ -35,3 +35,4 @@ build/
 
 ### ehcache ###
 /ehcache/
+/node_modules
