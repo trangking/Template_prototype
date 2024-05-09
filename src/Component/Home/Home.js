@@ -17,10 +17,11 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
-import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import SearchIcon from '@mui/icons-material/Search';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -97,7 +98,7 @@ function Home() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            ทดสอบระบบ
+            DaiJai Company
           </Typography>
         </Toolbar>
       </AppBar>
@@ -115,7 +116,7 @@ function Home() {
         open={open}
       >
         <DrawerHeader>
-          ทดสอบระบบ
+          DaiJai
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -126,13 +127,13 @@ function Home() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["หน้าหลัก", "สินค้า", "รายการบัญชี"].map((text, index) => (
+          {["หน้าหลัก", "เลือกโปรเจ็ค", "รายการ"].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   {index === 0 && <HomeIcon />}
-                  {index === 1 && <LocalGroceryStoreIcon />}
-                  {index === 2 && <AccountBalanceIcon />}
+                  {index === 1 && <SearchIcon />}
+                  {index === 2 && <AssignmentOutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -157,7 +158,31 @@ function Home() {
         </List>
       </Drawer>
       <Main open={open}>
-        <DrawerHeader />
+          <DrawerHeader />
+          <TableContainer component={Paper}>
+              <Table>
+                  <TableHead>
+                      <TableRow>
+                          <TableCell>ลำดับ</TableCell>
+                          <TableCell>รายการ</TableCell>
+                          <TableCell>ปริมาณ</TableCell>
+                          <TableCell>หน่วย</TableCell>
+                          <TableCell>ราคาต่อหน่วย(บาท)</TableCell>
+                          <TableCell>ราคารวม(บาท)</TableCell>
+                          <TableCell>รวมทั้งหมด(บาท)</TableCell>
+                          <TableCell>หมายเหตุ</TableCell>
+                      </TableRow>
+                  </TableHead>
+                  <TableBody>
+                      <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                      </TableRow>
+                      {/* เพิ่ม TableRow และ TableCell เพิ่มเติมตามความต้องการ */}
+                  </TableBody>
+              </Table>
+          </TableContainer>
       </Main>
     </Box>
   );
