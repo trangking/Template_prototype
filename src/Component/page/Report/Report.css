@@ -1,0 +1,8 @@
+.header-report{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+.report-button-container{
+    margin-left: auto;
+}
