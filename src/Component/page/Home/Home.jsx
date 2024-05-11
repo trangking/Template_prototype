@@ -1,9 +1,8 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useEffect, useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -26,59 +25,37 @@ import TableHome from "./TableHome";
 import Project from "../Project/Project";
 import Material from "../Material/Material";
 import ReportTable from "../Report/ReportTable";
-
-const drawerWidth = 240;
-
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  })
-);
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
-}));
+import useLoginStlyes from "./HomeStyles";
+import { useLocation } from "react-router-dom";
+import Axios from "axios";
 
 function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [selectedMenu, setSelectedMenu] = React.useState("หน้าหลัก");
+  const [open, setOpen] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState("หน้าหลัก");
+  const { drawerWidth, Main, AppBar, DrawerHeader } = useLoginStlyes();
+  const location = useLocation();
+  const token = location.state.token;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await Axios.get(
+          "http://localhost:8084/user/v1/daijai/profile",
+          {
+            headers: {
+              token: token,
+            },
+          }
+        );
+      } catch (error) {
+        navigate("/Login");
+      }
+    };
+
+    fetchData();
+  }, [token]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -167,13 +144,13 @@ function Home() {
           </ListItem>
         </List>
       </Drawer>
-        <Main open={open}>
-            <DrawerHeader/>
-            {selectedMenu === "หน้าหลัก" && <TableHome/>}
-            {selectedMenu === "เลือกโปรเจ็ค" && <Project/>}
-            {selectedMenu === "รายการ" && <ReportTable/>}
-            {selectedMenu === "แมททีเรียล" && <Material/>}
-        </Main>
+      <Main open={open}>
+        <DrawerHeader />
+        {selectedMenu === "หน้าหลัก" && <TableHome />}
+        {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
+        {selectedMenu === "รายการ" && <ReportTable />}
+        {selectedMenu === "แมททีเรียล" && <Material />}
+      </Main>
     </Box>
   );
 }

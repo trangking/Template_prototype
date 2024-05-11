@@ -10,7 +10,7 @@ import {
   import TableCellButton from "../../Button/TableCellButton";
   import ProjectButton from "../../Button/ProjectButton";
   import React from "react";
-  import "./Home.css"
+  import "../../Styles/Home.css"
 
   const TableHome = () => {
     const [open, setOpen] = React.useState(false);
