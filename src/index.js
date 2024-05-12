@@ -9,6 +9,7 @@ import Login from "./Component/page/Login/Login";
 import Home from "./Component/page/Home/Home";
 import TableHome from "./Component/page/Home/TableHome";
 import Material from "./Component/page/Material/Material";
+import Register from "./Component/page/AddProject/Register";
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
   {
     path: "/Material",
     element: <Material />,
+  },
+  {
+    path: "/Register",
+    element: <Register />,
   },
 ];
 

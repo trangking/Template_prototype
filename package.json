@@ -13,6 +13,7 @@
     "antd": "^5.16.4",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
+    "mdb-react-ui-kit": "^8.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.0",

@@ -28,6 +28,7 @@ import ReportTable from "../Report/ReportTable";
 import useLoginStlyes from "./HomeStyles";
 import { useLocation } from "react-router-dom";
 import Axios from "axios";
+import { notification } from "antd";
 
 function Home() {
   const navigate = useNavigate();
@@ -41,21 +42,18 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Axios.get(
-          "http://localhost:8084/user/v1/daijai/profile",
-          {
-            headers: {
-              token: token,
-            },
-          }
-        );
+        await Axios.get("http://localhost:8084/user/v1/daijai/profile", {
+          headers: {
+            token: token,
+          },
+        });
       } catch (error) {
         navigate("/Login");
       }
     };
 
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -67,6 +65,13 @@ function Home() {
   const handleItemClick = (menu) => {
     setSelectedMenu(menu);
     setOpen(false);
+  };
+  const handbleLogout = () => {
+    navigate("/Login");
+    notification.success({
+      message: "สำเร็จ",
+      description: "ออกจากระบบสำเร็จ",
+    });
   };
 
   return (
@@ -129,17 +134,12 @@ function Home() {
         </List>
         <Divider />
         <List>
-          <ListItem disablePadding>
-            <ListItemButton>
+          <ListItem>
+            <ListItemButton onClick={() => handbleLogout()}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText
-                onClick={() => {
-                  navigate("/Login");
-                }}
-                primary="ออกจากระบบ"
-              />
+              <ListItemText primary="ออกจากระบบ" />
             </ListItemButton>
           </ListItem>
         </List>
