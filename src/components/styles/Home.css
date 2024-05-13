@@ -1,0 +1,8 @@
+.header-home {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.project-home-button {
+    margin-left: auto;
+}
