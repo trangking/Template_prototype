@@ -7,10 +7,10 @@ import {
     TableRow,
     Paper,
   } from "@mui/material";
-  import TableCellButton from "../../Button/TableCellButton";
-  import ProjectButton from "../../Button/ProjectButton";
+  import TableCellButton from "../../buttons/TableCellButton";
+  import ProjectButton from "../../buttons/ProjectButton";
   import React from "react";
-  import "../../Styles/Home.css"
+  import "../../styles/Home.css"
 
   const TableHome = () => {
     const [open, setOpen] = React.useState(false);

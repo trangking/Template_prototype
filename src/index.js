@@ -5,11 +5,11 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./Component/page/Login/Login";
-import Home from "./Component/page/Home/Home";
-import TableHome from "./Component/page/Home/TableHome";
-import Material from "./Component/page/Material/Material";
-import Register from "./Component/page/AddProject/Register";
+import Login from "./components/pages/login/Login.jsx"
+import Home from "./components/pages/./home/Home";
+import TableHome from "./components/pages/./home/TableHome";
+import Material from "./components/pages/material/Material";
+import Register from "./components/pages/register/Register";
 
 const routes = [
   {
@@ -17,11 +17,11 @@ const routes = [
     element: <App />,
   },
   {
-    path: "/Login",
+    path: "/login",
     element: <Login />,
   },
   {
-    path: "/Home",
+    path: "/home",
     element: <Home />,
   },
   {
@@ -29,7 +29,7 @@ const routes = [
     element: <TableHome />,
   },
   {
-    path: "/Material",
+    path: "/material",
     element: <Material />,
   },
   {

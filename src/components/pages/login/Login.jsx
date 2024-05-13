@@ -41,7 +41,7 @@ export default function Test() {
           description: "เข้าสู่ระบบสำเร็จ",
         });
         navigate("/home", { state: { token: newToken } });
-      } else if (messageResponse === "Login Failed") {
+      } else if (messageResponse === "login Failed") {
         notification.error({
           message: "เกิดข้อผิดพลาด",
           description: "รหัสผ่านไม่ถูกต้อง",
