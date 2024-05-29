@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 
-const useLoginStlyes = () => {
+const useStlyes = () => {
   const drawerWidth = 240;
 
   const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -48,12 +48,25 @@ const useLoginStlyes = () => {
     justifyContent: "flex-end",
   }));
 
+  const styleModalAddproject = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return {
     drawerWidth,
     Main,
     AppBar,
     DrawerHeader,
+    styleModalAddproject,
   };
 };
 
-export default useLoginStlyes;
+export default useStlyes;
