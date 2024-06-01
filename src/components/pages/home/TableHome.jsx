@@ -40,7 +40,6 @@ const TableHome = () => {
             },
           }
         );
-
         setProject(response.data.project);
       } catch (error) {
         console.log(error);

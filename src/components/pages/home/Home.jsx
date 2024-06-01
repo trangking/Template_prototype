@@ -53,7 +53,7 @@ function Home() {
             },
           }
         );
-
+        localStorage.setItem("token", token);
         setuser(respones.data.user);
       } catch (error) {
         navigate("/Login");
