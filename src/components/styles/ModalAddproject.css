@@ -1,0 +1,7 @@
+.AreaModal {
+  display: flex;
+  flex-direction: column;
+}
+.AreaModal button {
+  margin-top: 10px;
+}

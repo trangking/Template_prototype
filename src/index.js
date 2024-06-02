@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./components/pages/login/Login.jsx"
+import Login from "./components/pages/login/Login.jsx";
 import Home from "./components/pages/./home/Home";
 import TableHome from "./components/pages/./home/TableHome";
 import Material from "./components/pages/material/Material";
