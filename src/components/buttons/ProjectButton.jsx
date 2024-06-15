@@ -27,7 +27,11 @@ function ProjectButton({ nameNewProject, handleClose }) {
       message.success("เพิ่มโปรเจคสำเร็จ");
       handleClose();
     } catch (error) {
-      console.error("There was an error creating the project:", error);
+      if (error.response && error.response.status === 400) {
+        message.error("กรุณากรอกชื่อโปรเจ็ค");
+      } else {
+        console.error("There was an error creating the project:", error);
+      }
     }
   };
 

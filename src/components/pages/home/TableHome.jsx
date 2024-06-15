@@ -25,28 +25,32 @@ const TableHome = () => {
   const [open, setOpen] = useState(false);
   const [project, setProject] = useState([]);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
   const [nameNewProject, setnameNewProject] = useState("");
   const { styleModalAddproject } = useStlyes();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await Axios.get(
-          "http://localhost:8080/user/v1/daijai/projects",
-          {
-            headers: {
-              token: token,
-            },
-          }
-        );
-        setProject(response.data.project);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchData();
   }, [token]);
+  const fetchData = async () => {
+    try {
+      const response = await Axios.get(
+        "http://localhost:8080/user/v1/daijai/projects",
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+      setProject(response.data.project);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
 
   const formatDate = (dateString) => {
     const [year, month, day] = dateString.split(" ")[0].split("-");
@@ -60,9 +64,9 @@ const TableHome = () => {
   return (
     <>
       <div className="header-home">
-        <h1>โปรเจค</h1>
+        <h1>โปรเจ็ค</h1>
         <Button className="project-button-home-container" onClick={handleOpen}>
-          + เพิ่มโปรเจค
+          + เพิ่มโปรเจ็ค
         </Button>
       </div>
       <TableContainer component={Paper}>
