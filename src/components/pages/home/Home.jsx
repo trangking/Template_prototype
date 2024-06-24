@@ -26,6 +26,7 @@ import Project from "../project/Project";
 import Material from "../material/Material";
 import ReportTable from "../report/ReportTable";
 import useStlyes from "./HomeStyles";
+import PageAddmaterial from "../material/PageAddmaterial";
 import { useLocation } from "react-router-dom";
 import Axios from "axios";
 import { notification } from "antd";
@@ -37,15 +38,17 @@ function Home() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("หน้าหลัก");
+  const [showAddMaterial, setShowAddMaterial] = useState(false);
   const { drawerWidth, Main, AppBar, DrawerHeader } = useStlyes();
   const location = useLocation();
   const token = location.state.token;
-  const [user, setuser] = useState([]);
+  const [user, setUser] = useState([]);
+  const [category3, setCategory3] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const respones = await Axios.get(
+        const response = await Axios.get(
           "http://localhost:8084/user/v1/daijai/profile",
           {
             headers: {
@@ -53,8 +56,7 @@ function Home() {
             },
           }
         );
-        localStorage.setItem("token", token);
-        setuser(respones.data.user);
+        setUser(response.data.user);
       } catch (error) {
         navigate("/Login");
       }
@@ -70,11 +72,15 @@ function Home() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const handleItemClick = (menu) => {
-    setSelectedMenu(menu);
-    setOpen(false);
+    if (!showAddMaterial) {
+      setSelectedMenu(menu);
+      setOpen(false);
+    }
   };
-  const handbleLogout = () => {
+
+  const handleLogout = () => {
     navigate("/Login");
     notification.success({
       message: "สำเร็จ",
@@ -82,8 +88,16 @@ function Home() {
     });
   };
 
+  const handleOpenAddMaterial = () => {
+    setShowAddMaterial(true);
+  };
+
+  const handleCloseAddMaterial = () => {
+    setShowAddMaterial(false);
+  };
+
   return (
-    <Context.Provider value={user}>
+    <Context.Provider value={{ user, token, category3, setCategory3 }}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="fixed" open={open}>
@@ -146,7 +160,7 @@ function Home() {
           <Divider />
           <List>
             <ListItem>
-              <ListItemButton onClick={() => handbleLogout()}>
+              <ListItemButton onClick={() => handleLogout()}>
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
@@ -157,10 +171,18 @@ function Home() {
         </Drawer>
         <Main open={open}>
           <DrawerHeader />
-          {selectedMenu === "หน้าหลัก" && <TableHome />}
-          {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
-          {selectedMenu === "รายการ" && <ReportTable />}
-          {selectedMenu === "แมททีเรียล" && <Material />}
+          {showAddMaterial ? (
+            <PageAddmaterial onClose={handleCloseAddMaterial} />
+          ) : (
+            <>
+              {selectedMenu === "หน้าหลัก" && <TableHome />}
+              {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
+              {selectedMenu === "รายการ" && <ReportTable />}
+              {selectedMenu === "แมททีเรียล" && (
+                <Material onAdd={handleOpenAddMaterial} />
+              )}
+            </>
+          )}
         </Main>
       </Box>
     </Context.Provider>
