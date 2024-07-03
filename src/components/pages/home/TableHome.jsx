@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import TableCellButton from "../../buttons/TableCellButton";
 import { Button } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../styles/Home.css";
 import Axios from "axios";
 import Box from "@mui/material/Box";
@@ -19,18 +19,19 @@ import TextField from "@mui/material/TextField";
 import ProjectButton from "../../buttons/ProjectButton";
 import useStlyes from "./HomeStyles";
 import "../../styles/ModalAddproject.css";
+import { Context } from "./Home";
 
 const TableHome = () => {
-  const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const [project, setProject] = useState([]);
   const handleOpen = () => setOpen(true);
-
+  const { token } = useContext(Context);
   const [nameNewProject, setnameNewProject] = useState("");
   const { styleModalAddproject } = useStlyes();
 
   useEffect(() => {
     fetchData();
+    console.log(token);
   }, [token]);
   const fetchData = async () => {
     try {
