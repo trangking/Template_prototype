@@ -1,0 +1,8 @@
+.AreaTable {
+  display: flex;
+  flex-direction: column;
+}
+.AreaTable .css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}

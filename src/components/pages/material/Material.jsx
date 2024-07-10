@@ -14,7 +14,9 @@ import {
 import Axios from "axios";
 import { Context } from "../home/Home";
 import useStlyes from "../home/HomeStyles";
-
+import "../../styles/Table.css";
+import AddIcon from "@mui/icons-material/Add";
+import { message } from "antd";
 const Material = ({ onAdd }) => {
   const { styleModalAddproject } = useStlyes();
   const { token } = useContext(Context);
@@ -23,6 +25,9 @@ const Material = ({ onAdd }) => {
   const [category3s, setCategory3s] = useState([]);
   const [category3, setCategory3] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openaddCategory, setopenaddCategory] = useState(false);
+  const [CategoryName, setCategoryName] = useState("");
+  const [CategoryCode, setCategoryCode] = useState("");
 
   const fetchDataMaterial = async () => {
     try {
@@ -60,7 +65,9 @@ const Material = ({ onAdd }) => {
 
   const handleClose = () => {
     setOpen(false);
+    setopenaddCategory(false);
     fetchDataMaterial();
+    fetchCategory3();
   };
 
   const handleOpen = async (materialID) => {
@@ -92,6 +99,28 @@ const Material = ({ onAdd }) => {
   const handleAddMaterialClick = () => {
     onAdd(category3);
   };
+  const handleAddCategory = async () => {
+    try {
+      const response = await Axios.post(
+        "http://localhost:8080/user/v1/daijai/category_3s/create",
+        {
+          name: CategoryName,
+          code: CategoryCode,
+        },
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+      handleClose();
+      console.log(response.data);
+      message.success("สร้างเสร็จสิ้น");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <div className="header-home">
@@ -172,26 +201,72 @@ const Material = ({ onAdd }) => {
         </Modal>
 
         {tabIndex === 1 && (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">ID</TableCell>
-                  <TableCell align="center">CODE</TableCell>
-                  <TableCell align="center">Descripition</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {category3.map((material) => (
-                  <TableRow key={material.Id}>
-                    <TableCell align="center">{material.Id}</TableCell>
-                    <TableCell align="center">{material.Name}</TableCell>
-                    <TableCell align="center">{material.Code}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <>
+            <div className="AreaTable">
+              <Button
+                onClick={() => {
+                  setopenaddCategory(true);
+                }}
+              >
+                + Category
+              </Button>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">ID</TableCell>
+                      <TableCell align="center">CODE</TableCell>
+                      <TableCell align="center">Descripition</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {category3.map((material) => (
+                      <TableRow key={material.Id}>
+                        <TableCell align="center">{material.Id}</TableCell>
+                        <TableCell align="center">{material.Name}</TableCell>
+                        <TableCell align="center">{material.Code}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <Modal open={openaddCategory} onClose={handleClose}>
+              <Box sx={styleModalAddproject}>
+                <div className="AreaModal">
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Add Category
+                  </Typography>
+                  <TextField
+                    label="ชื่อหมวดหมู่"
+                    id="margin-normal"
+                    margin="normal"
+                    value={CategoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                  />
+                  <TextField
+                    label="โค้ดหมวดหมู่"
+                    id="margin-normal"
+                    margin="normal"
+                    value={CategoryCode}
+                    onChange={(e) => setCategoryCode(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={handleAddCategory}
+                  >
+                    <Typography variant="button">สร้างหมวดหมู่</Typography>
+                  </Button>
+                </div>
+              </Box>
+            </Modal>
+          </>
         )}
       </Box>
     </>

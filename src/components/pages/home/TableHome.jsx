@@ -31,7 +31,6 @@ const TableHome = () => {
 
   useEffect(() => {
     fetchData();
-    console.log(token);
   }, [token]);
   const fetchData = async () => {
     try {

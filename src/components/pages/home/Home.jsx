@@ -1,37 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import HomeIcon from "@mui/icons-material/Home";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
-import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
-import EngineeringIcon from "@mui/icons-material/Engineering";
+import {
+  Box,
+  Drawer,
+  CssBaseline,
+  Toolbar,
+  List,
+  Typography,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Home as HomeIcon,
+  Logout as LogoutIcon,
+  Search as SearchIcon,
+  AssignmentOutlined as AssignmentOutlinedIcon,
+  Engineering as EngineeringIcon,
+} from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import Axios from "axios";
+import { notification } from "antd";
+import useStyles from "./HomeStyles";
 import TableHome from "./TableHome";
 import Project from "../project/Project";
 import Material from "../material/Material";
 import ReportTable from "../report/ReportTable";
-import useStlyes from "./HomeStyles";
 import PageAddmaterial from "../material/PageAddmaterial";
-import { useLocation } from "react-router-dom";
-import Axios from "axios";
-import { notification } from "antd";
+import PageAddReport from "../report/PageAddReport";
 
-export const Context = React.createContext();
+export const Context = createContext();
 
 function Home() {
   const navigate = useNavigate();
@@ -39,7 +43,8 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("หน้าหลัก");
   const [showAddMaterial, setShowAddMaterial] = useState(false);
-  const { drawerWidth, Main, AppBar, DrawerHeader } = useStlyes();
+  const [showAddEstimate, setShowAddEstimate] = useState(false);
+  const { drawerWidth, Main, AppBar, DrawerHeader } = useStyles();
   const location = useLocation();
   const token = location.state.token;
   const [user, setUser] = useState([]);
@@ -74,7 +79,7 @@ function Home() {
   };
 
   const handleItemClick = (menu) => {
-    if (!showAddMaterial) {
+    if (!showAddMaterial && !showAddEstimate) {
       setSelectedMenu(menu);
       setOpen(false);
     }
@@ -94,6 +99,12 @@ function Home() {
 
   const handleCloseAddMaterial = () => {
     setShowAddMaterial(false);
+  };
+  const handleOpenAddEstimate = () => {
+    setShowAddEstimate(true);
+  };
+  const handleCloseAddEstimate = () => {
+    setShowAddEstimate(false);
   };
 
   return (
@@ -160,7 +171,7 @@ function Home() {
           <Divider />
           <List>
             <ListItem>
-              <ListItemButton onClick={() => handleLogout()}>
+              <ListItemButton onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
@@ -171,13 +182,19 @@ function Home() {
         </Drawer>
         <Main open={open}>
           <DrawerHeader />
-          {showAddMaterial ? (
+          {showAddMaterial && (
             <PageAddmaterial onClose={handleCloseAddMaterial} />
-          ) : (
+          )}
+          {showAddEstimate && (
+            <PageAddReport onClose={handleCloseAddEstimate} />
+          )}
+          {!showAddMaterial && !showAddEstimate && (
             <>
               {selectedMenu === "หน้าหลัก" && <TableHome />}
               {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
-              {selectedMenu === "รายการ" && <ReportTable />}
+              {selectedMenu === "รายการ" && (
+                <ReportTable onAdd={handleOpenAddEstimate} />
+              )}
               {selectedMenu === "แมททีเรียล" && (
                 <Material onAdd={handleOpenAddMaterial} />
               )}
