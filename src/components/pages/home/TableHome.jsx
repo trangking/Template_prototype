@@ -25,6 +25,7 @@ const TableHome = () => {
   const [open, setOpen] = useState(false);
   const [project, setProject] = useState([]);
   const handleOpen = () => setOpen(true);
+  const [FirstName, setFristName] = useState("");
   const { token } = useContext(Context);
   const [nameNewProject, setnameNewProject] = useState("");
   const { styleModalAddproject } = useStlyes();
@@ -57,8 +58,11 @@ const TableHome = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const handleNameChange = (event) => {
+  const handleNameChangeProject = (event) => {
     setnameNewProject(event.target.value);
+  };
+  const handleNameChange = (event) => {
+    setFristName(event.target.value);
   };
 
   return (
@@ -112,11 +116,19 @@ const TableHome = () => {
               label={"ชื่อโปรเจ็ค"}
               id="margin-normal"
               margin="normal"
-              onChange={handleNameChange}
+              onChange={handleNameChangeProject}
               value={nameNewProject}
+            />
+            <TextField
+              label={"สร้างโดย"}
+              id="margin-normal"
+              margin="normal"
+              onChange={handleNameChange}
+              value={FirstName}
             />
             <ProjectButton
               nameNewProject={nameNewProject}
+              nameBy={FirstName}
               handleClose={handleClose}
             />
           </div>

@@ -6,7 +6,7 @@ import Axios from "axios";
 import { Context } from "../pages/home/Home";
 import { message } from "antd";
 
-function ProjectButton({ nameNewProject, handleClose }) {
+function ProjectButton({ nameNewProject, nameBy, handleClose }) {
   const user = useContext(Context);
   const token = localStorage.getItem("token");
 
@@ -16,7 +16,7 @@ function ProjectButton({ nameNewProject, handleClose }) {
         "http://localhost:8080/user/v1/daijai/projects/create",
         {
           projectName: nameNewProject,
-          createdBy: user.FirstName,
+          createdBy: nameBy,
         },
         {
           headers: {
