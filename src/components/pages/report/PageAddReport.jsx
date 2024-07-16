@@ -15,12 +15,19 @@ import {
   TextField,
   Chip,
   Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Axios from "axios";
 import { Context } from "../home/Home";
 import "../../styles/pageAddreport.css";
-import { message, Row } from "antd";
+import { message } from "antd";
 
 const PageAddReport = ({ onClose }) => {
   const { token } = useContext(Context);
@@ -39,6 +46,10 @@ const PageAddReport = ({ onClose }) => {
   const [openAddItem, setOpenAddItem] = useState(false);
   const [materialID, setMaterialID] = useState([]);
   const [material, setMaterial] = useState([]);
+  const [materialAmount, setMaterialAmount] = useState(0);
+  const [materialUnit, setMaterialUnit] = useState("");
+  const [showTableReport, setShowTableReport] = useState([]);
+
   const fetchData = async () => {
     try {
       const response = await Axios.get(
@@ -126,6 +137,7 @@ const PageAddReport = ({ onClose }) => {
       console.log(err);
     }
   };
+
   const createEstimateItem = async () => {
     try {
       const response = await Axios.post(
@@ -152,13 +164,10 @@ const PageAddReport = ({ onClose }) => {
     }
   };
 
-  const handleChangeEstimateType = (event) => {
-    setSelectedEstimateItemTypeID(event.target.value);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClickOpenAddEstimate = () => {
     setOpenAddItem(true);
   };
@@ -177,6 +186,38 @@ const PageAddReport = ({ onClose }) => {
     setMaterialID(typeof value === "string" ? value.split(",") : value);
   };
 
+  const crateEstimateItemMaterial = async () => {
+    try {
+      const newReport = {
+        Id: Date.now(),
+        Name: estimateItemName,
+        Description: materialID
+          .map((id) => material.find((mat) => mat.Id === id)?.Description)
+          .join(", "),
+        EstimateItemName: estimateItemName,
+      };
+      setShowTableReport([...showTableReport, newReport]);
+      await Axios.post(
+        "http://localhost:8080/user/v1/daijai/estimate_item_material/create",
+        {
+          projectId: selectedProjectID,
+          estimate_item_id: selectedEstimateItemID,
+          material_id: materialID,
+          material_amount: materialAmount,
+          material_unit: materialUnit,
+        },
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+      message.success("เพิ่มรายการสำเร็จ");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchData();
     fetchEstimateType();
@@ -185,88 +226,156 @@ const PageAddReport = ({ onClose }) => {
   }, []);
 
   return (
-    <div>
-      <IconButton onClick={onClose}>
-        <ArrowBackIcon />
-      </IconButton>
-      <h1>เพิ่มรายการ</h1>
-      <div className="AreaEstimate">
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="project-select-label">เลือกโปรเจค</InputLabel>
-          <Select
-            labelId="project-select-label"
-            id="project-select"
-            value={selectedProjectID}
-            onChange={(event) => {
-              setSelectedProjectID(event.target.value);
-            }}
-            input={<OutlinedInput label="เลือกโปรเจค" />}
-          >
-            {projects.map((project) => (
-              <MenuItem key={project.ID} value={project.ID}>
-                {project.ProjectName}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl
-          sx={{ marginTop: 5, marginLeft: 23, flexDirection: "row" }}
-        >
-          <InputLabel id="estimate-type-select-label">เลือกรายการ</InputLabel>
-          <Select
-            labelId="estimate-type-select-label"
-            id="estimate-type-select"
-            value={selectedEstimateItemID}
-            onChange={(event) => {
-              setSelectedEstimateItemID(event.target.value);
-            }}
-            input={<OutlinedInput label="เลือกรายการ" />}
-            sx={{ width: 300 }}
-          >
-            {estimateItem.map((item) => (
-              <MenuItem key={item.Id} value={item.Id} sx={{ width: 300 }}>
-                {item.Name}
-              </MenuItem>
-            ))}
-          </Select>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleClickOpenAddEstimate}
-            sx={{ marginLeft: 1, fontSize: 20 }}
-          >
-            +
-          </Button>
-        </FormControl>
-        <FormControl
-          sx={{ marginTop: 5, marginLeft: 46, flexDirection: "row" }}
-        >
-          <InputLabel id="material-id-label">ใส่ Material ID</InputLabel>
-          <Select
-            labelId="material-id-label"
-            id="material-id"
-            multiple
-            value={materialID}
-            onChange={handleChangeMaterialID}
-            input={<OutlinedInput label="ใส่ Material ID" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
+    <>
+      <div>
+        <IconButton onClick={onClose}>
+          <ArrowBackIcon />
+        </IconButton>
+        <h1>เพิ่มรายการ</h1>
+        <div className="PageAddReport">
+          <div className="AreaEstimate">
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="project-select-label">เลือกโปรเจค</InputLabel>
+              <Select
+                labelId="project-select-label"
+                id="project-select"
+                value={selectedProjectID}
+                onChange={(event) => {
+                  setSelectedProjectID(event.target.value);
+                }}
+                input={<OutlinedInput label="เลือกโปรเจค" />}
+              >
+                {projects.map((project) => (
+                  <MenuItem key={project.ID} value={project.ID}>
+                    {project.ProjectName}
+                  </MenuItem>
                 ))}
-              </Box>
-            )}
-            sx={{ width: 500 }}
-          >
-            {material.map((item) => (
-              <MenuItem key={item.Id} value={item.Id} sx={{ width: 500 }}>
-                {item.Description}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+              </Select>
+            </FormControl>
+            <FormControl
+              sx={{ marginTop: 5, marginLeft: 23, flexDirection: "row" }}
+            >
+              <InputLabel id="estimate-type-select-label">
+                เลือกรายการ
+              </InputLabel>
+              <Select
+                labelId="estimate-type-select-label"
+                id="estimate-type-select"
+                value={selectedEstimateItemID}
+                onChange={(event) => {
+                  setSelectedEstimateItemID(event.target.value);
+                }}
+                input={<OutlinedInput label="เลือกรายการ" />}
+                sx={{ width: 300 }}
+              >
+                {estimateItem.map((item) => (
+                  <MenuItem key={item.Id} value={item.Id} sx={{ width: 300 }}>
+                    {item.Name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClickOpenAddEstimate}
+                sx={{ marginLeft: 1, fontSize: 20 }}
+              >
+                +
+              </Button>
+            </FormControl>
+            <FormControl
+              sx={{ marginTop: 5, marginLeft: 46, flexDirection: "row" }}
+            >
+              <InputLabel id="material-id-label">ใส่ Material ID</InputLabel>
+              <Select
+                labelId="material-id-label"
+                id="material-id"
+                multiple
+                value={materialID}
+                onChange={handleChangeMaterialID}
+                input={<OutlinedInput label="ใส่ Material ID" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}
+                sx={{ width: 500 }}
+              >
+                {material.map((item) => (
+                  <MenuItem key={item.Id} value={item.Id} sx={{ width: 500 }}>
+                    {item.Description}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl
+              sx={{ marginTop: 5, marginLeft: 46, flexDirection: "row" }}
+            >
+              <TextField
+                label="ใส่ราคา"
+                value={materialAmount}
+                onChange={(event) => {
+                  setMaterialAmount(event.target.value);
+                }}
+                sx={{ width: 500 }}
+              />
+            </FormControl>
+            <FormControl
+              sx={{ marginTop: 5, marginLeft: 46, flexDirection: "row" }}
+            >
+              <TextField
+                label="หน่วย"
+                sx={{ width: 500 }}
+                value={materialUnit}
+                onChange={(event) => {
+                  setMaterialUnit(event.target.value);
+                }}
+              />
+            </FormControl>
+            <FormControl
+              sx={{ marginTop: 5, marginLeft: 69, flexDirection: "row" }}
+            >
+              <Button
+                onClick={crateEstimateItemMaterial}
+                color="primary"
+                sx={{
+                  marginTop: "50px",
+                }}
+              >
+                เพิ่มรายการ
+              </Button>
+            </FormControl>
+          </div>
+          <div className="TableReportShow">
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">ID</TableCell>
+                    <TableCell align="center">Name</TableCell>
+                    <TableCell align="center">Description</TableCell>
+                    <TableCell align="center">Estimate Item</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {showTableReport.map((report, index) => (
+                    <TableRow key={index}>
+                      <TableCell align="center">{report.Id}</TableCell>
+                      <TableCell align="center">{report.Name}</TableCell>
+                      <TableCell align="center">{report.Description}</TableCell>
+                      <TableCell align="center">
+                        {report.EstimateItemName}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
       </div>
-
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{"สร้างรายการ"}</DialogTitle>
         <DialogContent>
@@ -359,7 +468,7 @@ const PageAddReport = ({ onClose }) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

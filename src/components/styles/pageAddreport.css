@@ -1,7 +1,17 @@
+.PageAddReport {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+}
+
 .AreaEstimate {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100vh;
+  width: 50%;
+}
 
+.TableReportShow {
+  display: flex;
+  width: 40%;
 }
