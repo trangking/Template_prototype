@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,25 +14,26 @@ import { Context } from "../home/Home";
 import "../../styles/Report.css";
 
 const ReportTable = ({ onAdd }) => {
-  const [open, setOpen] = useState(false);
-  const { token } = useContext(Context);
   const [report, setReport] = useState([]);
+  const { token, estimateitem } = useContext(Context);
 
   useEffect(() => {
-    // fetchData();
-  }, []);
+    if (estimateitem) {
+      fetchData();
+    }
+  }, [estimateitem]);
 
   const fetchData = async () => {
     try {
       const response = await Axios.get(
-        // "http://localhost:8080/user/v1/daijai/estimate_item_material/estimate_item_materials",
+        `http://localhost:8080/user/v1/daijai/estimate_item_type/estimateitemtypes/${estimateitem}`,
         {
           headers: {
             token: token,
           },
         }
       );
-      setReport(response.data.data);
+      setReport(response.data);
     } catch (err) {
       console.log(err);
     }
@@ -61,16 +62,14 @@ const ReportTable = ({ onAdd }) => {
             {report.map((reportItem, index) => (
               <TableRow key={reportItem.Id}>
                 <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">
-                  {reportItem.EstimateItem.Name}
-                </TableCell>
-                <TableCell align="center">{reportItem.Quantity}</TableCell>
+                <TableCell align="center">{reportItem.projectName}</TableCell>
+                {/* <TableCell align="center">{reportItem.Quantity}</TableCell>
                 <TableCell align="center">{reportItem.MaterialUnit}</TableCell>
                 <TableCell align="center">
                   {reportItem.MaterialAmount}
                 </TableCell>
                 <TableCell align="center">{reportItem.LaborCost}</TableCell>
-                <TableCell align="center">{reportItem.TotalAmount}</TableCell>
+                <TableCell align="center">{reportItem.TotalAmount}</TableCell> */}
               </TableRow>
             ))}
           </TableBody>

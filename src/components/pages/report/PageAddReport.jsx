@@ -35,8 +35,8 @@ const PageAddReport = ({ onClose }) => {
   const [selectedProjectID, setSelectedProjectID] = useState("");
   const [estimateItemType, setEstimateItemType] = useState([]);
   const [selectedEstimateItemTypeID, setSelectedEstimateItemTypeID] =
-    useState(0);
-  const [selectedEstimateItemID, setSelectedEstimateItemID] = useState(0);
+    useState("");
+  const [selectedEstimateItemID, setSelectedEstimateItemID] = useState("");
   const [estimateItemTypeName, setEstimateItemTypeName] = useState("");
   const [estimateItemName, setEstimateItemName] = useState("");
   const [estimateCode, setEstimateCode] = useState("");
@@ -246,7 +246,7 @@ const PageAddReport = ({ onClose }) => {
                 input={<OutlinedInput label="เลือกโปรเจค" />}
               >
                 {projects.map((project) => (
-                  <MenuItem key={project.ID} value={project.ID}>
+                  <MenuItem key={project.Id} value={project.Id}>
                     {project.ProjectName}
                   </MenuItem>
                 ))}
@@ -361,7 +361,7 @@ const PageAddReport = ({ onClose }) => {
                 </TableHead>
                 <TableBody>
                   {showTableReport.map((report, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={report.Id}>
                       <TableCell align="center">{report.Id}</TableCell>
                       <TableCell align="center">{report.Name}</TableCell>
                       <TableCell align="center">{report.Description}</TableCell>

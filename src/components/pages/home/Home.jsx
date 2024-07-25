@@ -44,11 +44,13 @@ function Home() {
   const [selectedMenu, setSelectedMenu] = useState("หน้าหลัก");
   const [showAddMaterial, setShowAddMaterial] = useState(false);
   const [showAddEstimate, setShowAddEstimate] = useState(false);
+  const [showReportTable, setShowReportTable] = useState(false);
   const { drawerWidth, Main, AppBar, DrawerHeader } = useStyles();
   const location = useLocation();
   const token = location.state.token;
   const [user, setUser] = useState([]);
   const [category3, setCategory3] = useState([]);
+  const [estimateitem, setEstimateItem] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +81,7 @@ function Home() {
   };
 
   const handleItemClick = (menu) => {
-    if (!showAddMaterial && !showAddEstimate) {
+    if (!showAddMaterial && !showAddEstimate && !showReportTable) {
       setSelectedMenu(menu);
       setOpen(false);
     }
@@ -102,13 +104,34 @@ function Home() {
   };
   const handleOpenAddEstimate = () => {
     setShowAddEstimate(true);
+    setShowReportTable(false); // Ensure ReportTable is not shown
   };
   const handleCloseAddEstimate = () => {
     setShowAddEstimate(false);
   };
 
+  const handleOpenReportTable = () => {
+    setShowReportTable(true);
+    setShowAddEstimate(false); // Ensure AddEstimate is not shown
+  };
+
+  const handleCloseReportTable = () => {
+    setShowReportTable(false);
+  };
+
   return (
-    <Context.Provider value={{ user, token, category3, setCategory3 }}>
+    <Context.Provider
+      value={{
+        user,
+        token,
+        category3,
+        setCategory3,
+        estimateitem,
+        setEstimateItem,
+        handleOpenReportTable,
+        handleOpenAddEstimate,
+      }}
+    >
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="fixed" open={open}>
@@ -188,7 +211,8 @@ function Home() {
           {showAddEstimate && (
             <PageAddReport onClose={handleCloseAddEstimate} />
           )}
-          {!showAddMaterial && !showAddEstimate && (
+          {showReportTable && <ReportTable onAdd={handleOpenAddEstimate} />}
+          {!showAddMaterial && !showAddEstimate && !showReportTable && (
             <>
               {selectedMenu === "หน้าหลัก" && <TableHome />}
               {selectedMenu === "เลือกโปรเจ็ค" && <Project />}
