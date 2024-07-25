@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import TableCellButton from "../../buttons/TableCellButton";
 import { Button } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../styles/Home.css";
 import Axios from "axios";
 import Box from "@mui/material/Box";
@@ -19,50 +19,58 @@ import TextField from "@mui/material/TextField";
 import ProjectButton from "../../buttons/ProjectButton";
 import useStlyes from "./HomeStyles";
 import "../../styles/ModalAddproject.css";
+import { Context } from "./Home";
 
 const TableHome = () => {
-  const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const [project, setProject] = useState([]);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [FirstName, setFristName] = useState("");
+  const { token } = useContext(Context);
   const [nameNewProject, setnameNewProject] = useState("");
   const { styleModalAddproject } = useStlyes();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await Axios.get(
-          "http://localhost:8080/user/v1/daijai/projects",
-          {
-            headers: {
-              token: token,
-            },
-          }
-        );
-        setProject(response.data.project);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchData();
   }, [token]);
+  const fetchData = async () => {
+    try {
+      const response = await Axios.get(
+        "http://localhost:8080/user/v1/daijai/projects",
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+      setProject(response.data.project);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
 
   const formatDate = (dateString) => {
     const [year, month, day] = dateString.split(" ")[0].split("-");
     return `${day}-${month}-${year}`;
   };
 
-  const handleNameChange = (event) => {
+  const handleNameChangeProject = (event) => {
     setnameNewProject(event.target.value);
+  };
+  const handleNameChange = (event) => {
+    setFristName(event.target.value);
   };
 
   return (
     <>
       <div className="header-home">
-        <h1>โปรเจค</h1>
+        <h1>โปรเจ็ค</h1>
         <Button className="project-button-home-container" onClick={handleOpen}>
-          + เพิ่มโปรเจค
+          + เพิ่มโปรเจ็ค
         </Button>
       </div>
       <TableContainer component={Paper}>
@@ -108,11 +116,19 @@ const TableHome = () => {
               label={"ชื่อโปรเจ็ค"}
               id="margin-normal"
               margin="normal"
-              onChange={handleNameChange}
+              onChange={handleNameChangeProject}
               value={nameNewProject}
+            />
+            <TextField
+              label={"สร้างโดย"}
+              id="margin-normal"
+              margin="normal"
+              onChange={handleNameChange}
+              value={FirstName}
             />
             <ProjectButton
               nameNewProject={nameNewProject}
+              nameBy={FirstName}
               handleClose={handleClose}
             />
           </div>

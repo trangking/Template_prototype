@@ -1,0 +1,22 @@
+.PageAddmaterial {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.AreaPageAddmaterial {
+  width: 1000px;
+  border: 1px solid;
+}
+.Footer {
+  margin-top: 30px;
+  display: flex;
+  height: 50px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ButtonMA {
+  background-color: #19d247;
+}

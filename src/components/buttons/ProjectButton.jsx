@@ -6,7 +6,7 @@ import Axios from "axios";
 import { Context } from "../pages/home/Home";
 import { message } from "antd";
 
-function ProjectButton({ nameNewProject, handleClose }) {
+function ProjectButton({ nameNewProject, nameBy, handleClose }) {
   const user = useContext(Context);
   const token = localStorage.getItem("token");
 
@@ -16,7 +16,7 @@ function ProjectButton({ nameNewProject, handleClose }) {
         "http://localhost:8080/user/v1/daijai/projects/create",
         {
           projectName: nameNewProject,
-          createdBy: user.FirstName,
+          createdBy: nameBy,
         },
         {
           headers: {
@@ -27,7 +27,11 @@ function ProjectButton({ nameNewProject, handleClose }) {
       message.success("เพิ่มโปรเจคสำเร็จ");
       handleClose();
     } catch (error) {
-      console.error("There was an error creating the project:", error);
+      if (error.response && error.response.status === 400) {
+        message.error("กรุณากรอกชื่อโปรเจ็ค");
+      } else {
+        console.error("There was an error creating the project:", error);
+      }
     }
   };
 
